@@ -1,0 +1,7 @@
+<div>
+  <div *ngIf="!isEditing" (click)="toggleEdit()">
+    <div [innerHTML]="displayText"></div>
+  </div>
+  <input [(ngModel)]="editedText" *ngIf="isEditing" />
+  <button (click)="toggleEdit()">{{isEditing ? 'Submit' : 'Edit'}}</button>
+</div>
