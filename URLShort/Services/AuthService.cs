@@ -5,11 +5,18 @@ using System.Threading.Tasks;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
+
 
 using URLShort.Models;
 
 namespace URLShort.Services
 {
+    public class RegistrationResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+    }
     public enum AuthenticationResultStatus
     {
         Success,
@@ -35,7 +42,44 @@ namespace URLShort.Services
         {
             _dbContext = dbContext;
         }
-     
+        public async Task<RegistrationResult> RegisterAsync(string email, string password)
+        {
+            // Логіка реєстрації
+
+            // Перевірка, чи існує користувач з таким email
+            var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (existingUser != null)
+            {
+                return new RegistrationResult { Success = false, Message = "Email is already registered." };
+            }
+
+            // Якщо користувача з таким email немає, створюємо нового користувача
+            var newUser = new User
+            {
+                Email = email,
+                // Додайте інші властивості користувача за потребою
+            };
+
+            // Хешуємо пароль (використовуйте власну логіку для безпечного збереження паролів)
+            newUser.PasswordHash = HashPassword(password);
+
+            // Зберігаємо нового користувача в базі даних
+            _dbContext.Users.Add(newUser);
+            await _dbContext.SaveChangesAsync();
+
+            return new RegistrationResult { Success = true, Message = "Registration successful." };
+        }
+
+        private string HashPassword(string password)
+        {
+            // Логіка хешування паролю (використовуйте власну логіку для безпечного збереження паролів)
+            // В цьому прикладі використовується простий SHA256 хеш
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
+        }
         public async Task<AuthenticationResult> AuthenticateAsync(string email, string password)
         {
             // Логіка аутентифікації, перевірка пароля, тощо.

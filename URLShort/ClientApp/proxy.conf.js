@@ -7,11 +7,25 @@ const PROXY_CONFIG = [
   {
     context: [
       "/weatherforecast",
-   ],
+    ],
     target: target,
     secure: false,
+    ws: true,  // Вказати, що це проксі для WebSocket
     headers: {
       Connection: 'Keep-Alive'
+    }
+  },
+  // Додайте проксі для WebSocket, якщо ви використовуєте "/ws" для WebSocket
+  {
+    context: [
+      "/ws",
+    ],
+    target: target,
+    secure: false,
+    ws: true,  // Вказати, що це проксі для WebSocket
+    headers: {
+      Connection: 'Upgrade',
+      Upgrade: 'websocket'
     }
   }
 ]

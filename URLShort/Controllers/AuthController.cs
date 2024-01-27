@@ -39,6 +39,23 @@ namespace URLShort.Controllers
                 return StatusCode(500, new { Message = "An unexpected error occurred during login." });
             }
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            // Логіка реєстрації
+            var registrationResult = await _authService.RegisterAsync(model.Email, model.Password);
+
+            if (registrationResult.Success)
+            {
+                // Успішна реєстрація
+                return Ok(new { Message = "Registration successful. You can now login." });
+            }
+            else
+            {
+                // Невдалий реєстрація - повертаємо відповідне повідомлення
+                return BadRequest(new { Message = registrationResult.Message });
+            }
+        }
 
         // Інші методи контролера (реєстрація, виход і т.д.)
     }

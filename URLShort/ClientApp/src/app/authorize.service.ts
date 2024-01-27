@@ -216,4 +216,20 @@ export class AuthorizeService {
         })
       );
   }
+  public register(email: string, password: string, /* інші параметри */): Observable<IAuthenticationResult> {
+    const registerData = { email, password, /* інші параметри */ };
+
+    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth/register`, registerData)
+      .pipe(
+        map(result => {
+          // Тут ви можете додатково обробляти результат від серверу
+          if (result.status === AuthenticationResultStatus.Success) {
+            console.log('Registration successful:', result);
+          } else {
+            console.error('Registration failed:', result);
+          }
+          return result;
+        })
+      );
+  }
 }
