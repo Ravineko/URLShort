@@ -8,6 +8,13 @@ namespace URLShort.Models
         public string Email { get; set; }
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
-        // Додайте інші необхідні вам властивості для реєстрації
+
+        [Required]
+        [StringLength(50)]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        public string DrivingLicense { get; set; }
     }
 }

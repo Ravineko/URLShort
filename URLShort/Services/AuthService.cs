@@ -42,7 +42,7 @@ namespace URLShort.Services
         {
             _dbContext = dbContext;
         }
-        public async Task<RegistrationResult> RegisterAsync(string email, string password)
+        public async Task<RegistrationResult> RegisterAsync(string email, string password, string drivingLicense, string phoneNumber)
         {
             // Логіка реєстрації
 
@@ -57,6 +57,8 @@ namespace URLShort.Services
             var newUser = new User
             {
                 Email = email,
+                PhoneNumber = phoneNumber,
+                DrivingLicense = drivingLicense,
                 // Додайте інші властивості користувача за потребою
             };
 

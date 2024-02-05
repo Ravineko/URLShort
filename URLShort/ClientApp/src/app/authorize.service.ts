@@ -202,7 +202,7 @@ export class AuthorizeService {
   public login(email: string, password: string): Observable<IAuthenticationResult> {
     const loginData = { email, password };
 
-    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth`, loginData)
+    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth/login`, loginData)
       .pipe(
         map(result => {
           // Тут ви можете додатково обробляти результат від серверу
@@ -216,8 +216,8 @@ export class AuthorizeService {
         })
       );
   }
-  public register(email: string, password: string, /* інші параметри */): Observable<IAuthenticationResult> {
-    const registerData = { email, password, /* інші параметри */ };
+  public register(email: string, password: string, drivingLicense:string, phoneNumber:string): Observable<IAuthenticationResult> {
+    const registerData = { email, password, drivingLicense, phoneNumber };
 
     return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth/register`, registerData)
       .pipe(

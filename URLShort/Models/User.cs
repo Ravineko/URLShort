@@ -8,8 +8,7 @@ namespace URLShort.Models
         // Наприклад, додайте власний Id, ім'я, прізвище, тощо., в залежності від ваших потреб
 
        
-         public string FirstName { get; set; }
-         public string LastName { get; set; }
+         public string DrivingLicense { get; set; }
 
     }
 }
