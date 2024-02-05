@@ -92,20 +92,32 @@ namespace URLShort.Services
             if (user != null && VerifyPassword(password, user.PasswordHash))
             {
                 // Користувач успішно аутентифікований
-                return new AuthenticationResult { Status = AuthenticationResultStatus.Success, State = user };
+                var token = await GenerateTokenAsync(user);
+                return new AuthenticationResult 
+                { 
+                  Status = AuthenticationResultStatus.Success,
+                  State = user,
+                  Token = token
+                };
             }
             else
             {
                 // Невдала аутентифікація
-                return new AuthenticationResult { Status = AuthenticationResultStatus.Fail, Message = "Invalid email or password" };
+                return new AuthenticationResult 
+                {
+                    Status = AuthenticationResultStatus.Fail,
+                    Message = "Invalid email or password"
+                };
             }
         }
 
         private bool VerifyPassword(string enteredPassword, string storedPasswordHash)
         {
-            // Логіка перевірки паролю (наприклад, за допомогою бібліотеки BCrypt)
-            // Повертає true, якщо пароль вірний, інакше false
-            return true;
+            string enteredPasswordHash = HashPassword(enteredPassword);
+
+            // Порівнюємо збережений хеш і хеш введеного паролю
+            return string.Equals(enteredPasswordHash, storedPasswordHash, StringComparison.OrdinalIgnoreCase);
+
         }
         public async Task<string> GenerateTokenAsync(User user)
         {

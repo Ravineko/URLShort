@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         result => {
           if (result?.status === AuthenticationResultStatus.Success) {
             // Успішний логін - перенаправлення на головну сторінку або іншу потрібну сторінку
-            this.router.navigate(['/home']);
+            this.router.navigate(['/']);
           } else if (result?.status === AuthenticationResultStatus.Fail) {
             // Невдалий логін - встановлення повідомлення про помилку
             this.message.next((result as FailureAuthenticationResult).message);
