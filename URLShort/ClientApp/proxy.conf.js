@@ -4,14 +4,28 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
   env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:4583';
 
 const PROXY_CONFIG = [
+  // {
+  //   context: [
+  //     "/weatherforecast",
+  //   ],
+  //   target: target,
+  //   secure: false,
+  //   ws: true,  // Вказати, що це проксі для WebSocket
+  //   headers: {
+  //     Connection: 'Keep-Alive'
+  //   }
+  // },
+  // Додайте проксі для WebSocket, якщо ви використовуєте "/ws" для WebSocket
   {
     context: [
-      "/weatherforecast",
-   ],
+      "/ws",
+    ],
     target: target,
     secure: false,
+    ws: true,  // Вказати, що це проксі для WebSocket
     headers: {
-      Connection: 'Keep-Alive'
+      Connection: 'Upgrade',
+      Upgrade: 'websocket'
     }
   }
 ]

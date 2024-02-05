@@ -40,6 +40,10 @@ export interface IUser {
   providedIn: 'root'
 })
 export class AuthorizeService {
+
+  isAuthenticated: boolean = false;
+  isAdmin: boolean = false;
+
   // By default pop ups are disabled because they don't work properly on Edge.
   // If you want to enable pop up authentication simply set this flag to false.
 
@@ -47,9 +51,9 @@ export class AuthorizeService {
   private userManager?: UserManager;
   private userSubject: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
   constructor(private http: HttpClient) {}
-  public isAuthenticated(): Observable<boolean> {
-    return this.getUser().pipe(map(u => !!u));
-  }
+  // public isAuthenticated(): Observable<boolean> {
+  //   return this.getUser().pipe(map(u => !!u));
+  // }
 
   public getUser(): Observable<IUser | null> {
     return concat(
@@ -199,14 +203,20 @@ export class AuthorizeService {
         mergeMap(() => this.userManager!.getUser()),
         map(u => u && u.profile));
   }
+
+
   public login(email: string, password: string): Observable<IAuthenticationResult> {
     const loginData = { email, password };
 
-    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth`, loginData)
+    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth/login`, loginData)
       .pipe(
         map(result => {
           // Тут ви можете додатково обробляти результат від серверу
           if (result.status === AuthenticationResultStatus.Success) {
+            this.isAuthenticated = true;
+              if(email === "admin@gmail.com"){
+                 this.isAdmin = true;
+              }
             console.log('Login successful:', result);
           } else  {
             result.status === AuthenticationResultStatus.Fail
@@ -216,4 +226,21 @@ export class AuthorizeService {
         })
       );
   }
+  public register(email: string, password: string, drivingLicense:string, phoneNumber:string): Observable<IAuthenticationResult> {
+    const registerData = { email, password, drivingLicense, phoneNumber };
+
+    return this.http.post<IAuthenticationResult>(`https://localhost:44305/api/auth/register`, registerData)
+      .pipe(
+        map(result => {
+          // Тут ви можете додатково обробляти результат від серверу
+          if (result.status === AuthenticationResultStatus.Success) {
+            console.log('Registration successful:', result);
+          } else {
+            console.error('Registration failed:', result);
+          }
+          return result;
+        })
+      );
+  }
+  
 }

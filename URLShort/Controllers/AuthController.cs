@@ -25,18 +25,42 @@ namespace URLShort.Controllers
 
             if (result.Status == AuthenticationResultStatus.Success)
             {
-                // Успішна авторизація
-                return Ok(new { Token = result.Token }); // Повертаємо токен або інші дані
+               
+                return Ok(new AuthenticationResult
+                {
+                    Token = result.Token,
+                    Status = result.Status,
+                    State = result.State as User,
+                    Message = result.Message
+                }); 
+
             }
             else if (result.Status == AuthenticationResultStatus.Fail)
             {
-                // Невдалий логін - повертаємо відповідне повідомлення
+                
                 return BadRequest(new { Message = result.Message });
             }
             else
             {
-                // Інші випадки, якщо не Fail
+                
                 return StatusCode(500, new { Message = "An unexpected error occurred during login." });
+            }
+        }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            // Логіка реєстрації
+            var registrationResult = await _authService.RegisterAsync(model.Email, model.Password,model.PhoneNumber, model.DrivingLicense);
+
+            if (registrationResult.Success)
+            {
+                // Успішна реєстрація
+                return Ok(new { Message = "Registration successful. You can now login." });
+            }
+            else
+            {
+                // Невдалий реєстрація - повертаємо відповідне повідомлення
+                return BadRequest(new { Message = registrationResult.Message });
             }
         }
 
