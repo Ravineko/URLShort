@@ -26,7 +26,14 @@ namespace URLShort.Controllers
             if (result.Status == AuthenticationResultStatus.Success)
             {
                
-                return Ok(new { Token = result.Token }); 
+                return Ok(new AuthenticationResult
+                {
+                    Token = result.Token,
+                    Status = result.Status,
+                    State = result.State as User,
+                    Message = result.Message
+                }); 
+
             }
             else if (result.Status == AuthenticationResultStatus.Fail)
             {
