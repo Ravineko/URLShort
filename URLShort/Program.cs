@@ -25,6 +25,8 @@ builder.Services.AddDbContext<ShortenerDbContext>(options =>
 
 builder.Services.AddScoped<ShortenLinkGenerator>();
 
+builder.Services.AddScoped<IAuthService, AuthService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
