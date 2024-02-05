@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using URLShort.Models;
 using URLShort.Services;
+using URLShort.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,6 +42,12 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AllowSpecificOrigin");
 
+app.UseMiddleware<WebSocketMiddleware>();
+app.Map("/ws", builder =>
+{
+    builder.UseMiddleware<WebSocketMiddleware>();
+    // Додаткові налаштування WebSocketMiddleware для цього шляху
+});
 
 app.MapControllerRoute(
     name: "default",

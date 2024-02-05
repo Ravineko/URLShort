@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required],
       drivingLicense: ['', Validators.required],
-      phone: ['', Validators.required]
+      phoneNumber: ['', Validators.required]
     });
   }
 
@@ -26,10 +26,11 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       const email = this.registerForm.get('email')?.value;
       const password = this.registerForm.get('password')?.value;
-      // Отримати інші значення з форми (drivingLicense, phone і т. д.)
+      const drivingLicense = this.registerForm.get('drivingLicense')?.value;
+      const phoneNumber = this.registerForm.get('phoneNumber')?.value;
 
       // Виклик сервісу для реєстрації
-      this.authorizeService.register(email, password, /* інші параметри */).subscribe(result => {
+      this.authorizeService.register(email, password, drivingLicense, phoneNumber).subscribe(result => {
         // Обробка результату реєстрації
         if (result.status === AuthenticationResultStatus.Success) {
           // Реєстрація успішна - можна виконати потрібні дії, наприклад, перенаправлення на іншу сторінку
