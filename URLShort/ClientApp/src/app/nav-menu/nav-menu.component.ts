@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthorizeService } from '../authorize.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -8,11 +9,17 @@ import { Component } from '@angular/core';
 export class NavMenuComponent {
   isExpanded = false;
 
+  constructor(public authService: AuthorizeService) {}
+
   collapse() {
     this.isExpanded = false;
   }
 
   toggle() {
     this.isExpanded = !this.isExpanded;
+  }
+
+  logout() {
+    this.authService.logout();
   }
 }

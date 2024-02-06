@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User, UserManager } from 'oidc-client';
-import { BehaviorSubject, concat, from, Observable } from 'rxjs';
-import { filter, map, mergeMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, concat, from, Observable, throwError } from 'rxjs';
+import { catchError, filter, map, mergeMap, take, tap } from 'rxjs/operators';
 import { ApplicationPaths, ApplicationName } from './api-authorization.constants';
 import { HttpClient } from '@angular/common/http';
 
@@ -241,6 +241,25 @@ export class AuthorizeService {
           return result;
         })
       );
+  }
+
+
+  logout(): Observable<boolean> {
+    return this.http.post<any>('https://localhost:44305/api/auth/logout', null).pipe(
+      map(response => {
+        if (response.success) {
+          // Видалення даних про авторизованого користувача, якщо потрібно
+          // Наприклад, this.removeUserData();
+          return true;
+        } else {
+          return false;
+        }
+      }),
+      catchError(error => {
+        console.error('Logout error:', error);
+        return throwError('Logout failed. Please try again.');
+      })
+    );
   }
   
 }
