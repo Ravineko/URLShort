@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthorizeService, AuthenticationResultStatus} from '../authorize.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -8,6 +9,8 @@ import { AuthorizeService, AuthenticationResultStatus} from '../authorize.servic
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  public message = new BehaviorSubject<string | null | undefined>(null);
+  successMessage: string | null = null;
   registerForm!: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private authorizeService: AuthorizeService) { }
@@ -33,13 +36,15 @@ export class RegisterComponent implements OnInit {
       this.authorizeService.register(email, password, drivingLicense, phoneNumber).subscribe(result => {
         // Обробка результату реєстрації
         if (result.status === AuthenticationResultStatus.Success) {
-          // Реєстрація успішна - можна виконати потрібні дії, наприклад, перенаправлення на іншу сторінку
+          this.successMessage = 'Registration successful. You can now login.';
         } else if (result.status === AuthenticationResultStatus.Fail) {
           // Реєстрація не вдалася - встановлення повідомлення про помилку
           console.error(result.message);
+          this.message.next(result.message);
         } else {
           // Інші випадки, якщо не Fail
           console.error('An unexpected error occurred during registration.');
+          this.message.next('An unexpected error occurred during registration.');
         }
       });
     }

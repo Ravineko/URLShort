@@ -52,10 +52,14 @@ namespace URLShort.Controllers
             // Логіка реєстрації
             var registrationResult = await _authService.RegisterAsync(model.Email, model.Password,model.PhoneNumber, model.DrivingLicense);
 
-            if (registrationResult.Success)
+            if (registrationResult.Status == RegistrationResultStatus.Success)
             {
                 // Успішна реєстрація
-                return Ok(new { Message = "Registration successful. You can now login." });
+                return Ok(new  RegistrationResult
+                {
+                    Status = registrationResult.Status,
+                    Message = "Registration successful. You can now login."
+                });
             }
             else
             {

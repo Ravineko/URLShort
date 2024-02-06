@@ -12,9 +12,14 @@ using URLShort.Models;
 
 namespace URLShort.Services
 {
+    public enum RegistrationResultStatus
+    {
+        Success,
+        Fail
+    }
     public class RegistrationResult
     {
-        public bool Success { get; set; }
+        public RegistrationResultStatus Status { get; set; }
         public string Message { get; set; }
     }
     public enum AuthenticationResultStatus
@@ -50,7 +55,11 @@ namespace URLShort.Services
             var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (existingUser != null)
             {
-                return new RegistrationResult { Success = false, Message = "Email is already registered." };
+                return new RegistrationResult 
+                {
+                    Status = RegistrationResultStatus.Fail, 
+                    Message = "Email is already registered." 
+                };
             }
 
             // Якщо користувача з таким email немає, створюємо нового користувача
@@ -69,7 +78,11 @@ namespace URLShort.Services
             _dbContext.Users.Add(newUser);
             await _dbContext.SaveChangesAsync();
 
-            return new RegistrationResult { Success = true, Message = "Registration successful." };
+            return new RegistrationResult
+            { 
+                Status = RegistrationResultStatus.Success,
+                Message = "Registration successful." 
+            };
         }
 
         private string HashPassword(string password)
