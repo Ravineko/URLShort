@@ -67,7 +67,12 @@ namespace URLShort.Controllers
                 return BadRequest(new { Message = registrationResult.Message });
             }
         }
-
-        // Інші методи контролера (реєстрація, виход і т.д.)
+        [HttpPost("logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync();
+            return Ok(new { Message = "Logout successful." });
+        }
     }
 }

@@ -4,19 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 using URLShort.Services;
 using URLShort.Models;
 using URLShort.Dtos;
-using System.Linq; // Додайте цей імпорт для методів розширення LINQ
+using System.Linq; 
 
 namespace URLShort.Controllers
 {
     public class LinkController : Controller
     {
 
-        private readonly ShortenerDbContext _dbContext; // Додайте об'єкт контексту бази даних
+        private readonly ShortenerDbContext _dbContext; 
 
-        public LinkController( ShortenerDbContext dbContext) // Змініть "YourDbContext" на ваш реальний клас контексту бази даних
+        public LinkController( ShortenerDbContext dbContext) 
         {
 
-            _dbContext = dbContext; // Ініціалізуйте об'єкт контексту бази даних
+            _dbContext = dbContext; 
 
         }
 
@@ -36,7 +36,7 @@ namespace URLShort.Controllers
                 {
                     originalLink = linkModel.OriginalLink,
                     shortenedLink = linkModel.ShortenedLink,
-                    dateAdded = linkModel.DateAdded // Припустимо, що у вашій моделі є властивість DateAdded
+                    dateAdded = linkModel.DateAdded 
                 });
             }
             else
@@ -52,10 +52,10 @@ namespace URLShort.Controllers
                 return BadRequest("Original link cannot be empty");
             }
 
-            // Генеруємо скорочене посилання
+           
             string shortenedLink = ShortenLinkGenerator.ShortenLink(linkDto.OriginalLink);
 
-            // Створюємо новий об'єкт LinkModel
+            
             var newLink = new LinkModel
             {
                 OriginalLink = linkDto.OriginalLink,
@@ -63,11 +63,11 @@ namespace URLShort.Controllers
                 DateAdded = DateTime.Now
             };
 
-            // Додаємо новий об'єкт до бази даних
+           
             _dbContext.Links.Add(newLink);
             _dbContext.SaveChanges();
 
-            return Ok(newLink); // Повертаємо створений об'єкт, якщо потрібно
+            return Ok(newLink); 
         }
         [HttpDelete("Delete/{id}")]
         public IActionResult DeleteLink(int id)
@@ -88,7 +88,7 @@ namespace URLShort.Controllers
             }
             catch (Exception ex)
             {
-                // Обробка помилки
+                
                 return BadRequest($"Failed to delete link: {ex.Message}");
             }
         }

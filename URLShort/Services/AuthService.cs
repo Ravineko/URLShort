@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
+using System.Security.Claims;
 
 
 using URLShort.Models;
@@ -37,21 +38,18 @@ namespace URLShort.Services
     }
     public class AuthService : IAuthService
     {
-        private readonly string _jwtSecretKey = "your_jwt_secret_key"; // Замініть на власний секретний ключ
-        private readonly string _jwtIssuer = "your_issuer"; // Замініть на власний ісуючий
-        private readonly string _jwtAudience = "your_audience"; // Замініть на власний аудиторію
+        private readonly string _jwtSecretKey = "your_jwt_secret_key"; 
+        private readonly string _jwtIssuer = "your_issuer"; 
+        private readonly string _jwtAudience = "your_audience"; 
 
         private readonly ShortenerDbContext _dbContext;
-
         public AuthService(ShortenerDbContext dbContext)
         {
             _dbContext = dbContext;
         }
         public async Task<RegistrationResult> RegisterAsync(string email, string password, string drivingLicense, string phoneNumber)
         {
-            // Логіка реєстрації
-
-            // Перевірка, чи існує користувач з таким email
+            
             var existingUser = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (existingUser != null)
             {
@@ -62,19 +60,19 @@ namespace URLShort.Services
                 };
             }
 
-            // Якщо користувача з таким email немає, створюємо нового користувача
+            
             var newUser = new User
             {
                 Email = email,
                 PhoneNumber = phoneNumber,
                 DrivingLicense = drivingLicense,
-                // Додайте інші властивості користувача за потребою
+               
             };
 
-            // Хешуємо пароль (використовуйте власну логіку для безпечного збереження паролів)
+            
             newUser.PasswordHash = HashPassword(password);
 
-            // Зберігаємо нового користувача в базі даних
+           
             _dbContext.Users.Add(newUser);
             await _dbContext.SaveChangesAsync();
 
@@ -97,14 +95,12 @@ namespace URLShort.Services
         }
         public async Task<AuthenticationResult> AuthenticateAsync(string email, string password)
         {
-            // Логіка аутентифікації, перевірка пароля, тощо.
-
-            // Приклад використання контексту бази даних для отримання користувача за email
+           
             var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
 
             if (user != null && VerifyPassword(password, user.PasswordHash))
             {
-                // Користувач успішно аутентифікований
+                
                 var token = await GenerateTokenAsync(user);
                 return new AuthenticationResult 
                 { 
@@ -115,7 +111,7 @@ namespace URLShort.Services
             }
             else
             {
-                // Невдала аутентифікація
+                
                 return new AuthenticationResult 
                 {
                     Status = AuthenticationResultStatus.Fail,
@@ -128,28 +124,37 @@ namespace URLShort.Services
         {
             string enteredPasswordHash = HashPassword(enteredPassword);
 
-            // Порівнюємо збережений хеш і хеш введеного паролю
+           
             return string.Equals(enteredPasswordHash, storedPasswordHash, StringComparison.OrdinalIgnoreCase);
 
         }
         public async Task<string> GenerateTokenAsync(User user)
         {
-            // Логіка генерації JWT токену
+            
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: _jwtIssuer,
                 audience: _jwtAudience,
-                claims: null, // Додайте власні клейми, якщо необхідно
-                expires: DateTime.UtcNow.AddHours(1), // Час життя токена
+                claims: null, 
+                expires: DateTime.UtcNow.AddHours(1), 
                 signingCredentials: credentials
             );
 
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
         }
-        // Інші методи аутентифікації, реєстрації, вихіду, тощо.
+        public async Task<AuthenticationResult> LogoutAsync()
+        {
+           
+            return new AuthenticationResult
+            {
+                Status = AuthenticationResultStatus.Success,
+                Token = null
+            };
+        }
+       
     }
 
 }

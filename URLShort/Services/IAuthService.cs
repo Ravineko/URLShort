@@ -7,7 +7,9 @@ namespace URLShort.Services
     public interface IAuthService
     {
         Task<AuthenticationResult> AuthenticateAsync(string email, string password);
+        Task<AuthenticationResult> LogoutAsync();
         Task<RegistrationResult> RegisterAsync(string email, string password, string firstName, string lastName); 
         Task<string> GenerateTokenAsync(User user);
+        
     }
 }
