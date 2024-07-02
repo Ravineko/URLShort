@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using URLShort.Services;
 using URLShort.Models;
 using URLShort.Dtos;
-using System.Linq; 
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace URLShort.Controllers
 {
@@ -18,6 +20,39 @@ namespace URLShort.Controllers
 
             _dbContext = dbContext; 
 
+        }
+        [HttpGet("text")]
+        public AboutText Text() 
+        { 
+            return _dbContext.AboutTexts.FirstOrDefault();
+        }
+        [HttpPut("UpdateText")]
+        public async Task<IActionResult> EditAboutText([FromBody] AboutText aboutText)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // Assuming there's only one AboutText record
+            var existingAboutText =  _dbContext.AboutTexts.FirstOrDefault();
+            if (existingAboutText == null)
+            {
+                return NotFound("About text not found.");
+            }
+
+            existingAboutText.Text = aboutText.Text;
+
+            try
+            {
+                 _dbContext.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500, "An error occurred while updating the text.");
+            }
+
+            return NoContent();
         }
 
         [HttpGet("List")]

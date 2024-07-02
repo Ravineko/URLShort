@@ -22,6 +22,15 @@ namespace URLShort.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("URLShort.Models.AboutText", b =>
+                {
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("AboutTexts");
+                });
+
             modelBuilder.Entity("URLShort.Models.LinkModel", b =>
                 {
                     b.Property<int>("Id")
