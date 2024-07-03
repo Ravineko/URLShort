@@ -141,5 +141,19 @@ namespace URLShort.Controllers
                 return NotFound();
             }
         }
+        [HttpGet("{shortUrl}")]
+        public IActionResult RedirectToFullUrl(string shortUrl)
+        {
+           
+            var link = _dbContext.Links.FirstOrDefault(l => l.ShortenedLink == shortUrl);
+            if (link == null)
+            {
+             
+                return NotFound();
+            }
+
+           
+            return Redirect(link.OriginalLink);
+        }
     }
 }

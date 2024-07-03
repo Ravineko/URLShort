@@ -25,7 +25,7 @@
     <tr *ngFor="let link of links">
       <td><a href="javascript:void(0);" class="info-button" (click)="openLinkInfo(link.id)">{{ link.id }}</a></td>
       <td>{{ link.originalLink }}</td>
-      <td><a href="javascript:void(0);" (click)="redirectUrl(link.id)">{{ link.shortenedLink }}</a></td>
+      <td><a href="javascript:void(0);" (click)="redirectUrl(link.id)">{{ "https://localhost:44305/" + link.shortenedLink }}</a></td>
       <td *ngIf="authService.isAdmin;"><button class="close-button" (click)="deleteLink(link.id)"></button></td>
 
     </tr>
@@ -45,7 +45,7 @@
       <tr *ngFor="let link of links">
         <td>{{ link.id }}</td>
         <td>{{ link.originalLink }}</td>
-        <td><a href="javascript:void(0);" (click)="redirectUrl(link.id)">{{ link.shortenedLink }}</a></td>
+        <td><a href="javascript:void(0);" (click)="redirectUrl(link.id)">{{"https://localhost:44305/" + link.shortenedLink }}</a></td>
       </tr>
     </tbody>
   </table>
