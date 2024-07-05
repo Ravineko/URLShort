@@ -1,18 +1,61 @@
-a.navbar-brand {
+/* Main container style */
+.navbar {
+  background-color: #1a1917; /* Darker background for contrast */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  margin-bottom: 2rem;
+}
+
+/* Navbar brand style */
+.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  color: #f2e090;
+  font-size: 24px;
+}
+
+/* Navbar toggler icon */
+.navbar-toggler {
+  border-color: #f2e090;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28242, 224, 144, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* Navbar link style */
+.nav-link {
+  color: #fdf8df !important;
+  font-size: 16px;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #f3d861 !important;
+}
+
+/* Active link style */
+.link-active {
+  color: #f3d861 !important;
+}
+
+/* Container style */
+.container {
+  font-family: 'Arial', sans-serif;
+  color: #fdf8df;
 }
 
 html {
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
 }
 
+/* Box shadow style */
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }

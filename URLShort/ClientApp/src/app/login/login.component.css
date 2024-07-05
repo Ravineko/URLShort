@@ -1,37 +1,71 @@
+/* Main container style */
 .login-container {
   max-width: 400px;
   margin: auto;
+  padding: 2rem;
+  background-color: #21201b;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
 }
 
-/* Style for the form */
-.loginr-form {
+/* Header style */
+.login-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #f2e090;
+}
+
+/* Form style */
+.login-form {
   margin-top: 20px;
 }
 
-/* Style for form labels */
+/* Label style */
 .login-form label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 0.15rem;
+  text-align: left;
+  font-weight: bold;
+  color: #f2e090;
 }
 
-/* Style for form inputs */
+/* Input style */
 .login-form input {
   width: 100%;
-  padding: 8px;
+  padding: 0.5rem;
   margin-bottom: 16px;
   box-sizing: border-box;
+  border:none;
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: #545144;
+  color: #fdf8df;
 }
 
-/* Style for the submit button */
+/* Button style */
 .login-form button {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 15px;
+  font: inherit;
+  width: 100%;
+  background-color: #f2e090;
+  color: #2c2a21;
+  padding: 0.5rem 1rem;
   border: none;
+  border-radius: 0.25rem;
+  font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-  /* Style for the submit button on hover */
-  .login-form button:hover {
-    background-color: #45a049;
-  }
+/* Button hover effect */
+.login-form button:hover {
+  background-color: #f3d861;
+}
+
+/* Focus effect for inputs */
+.login-form input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
